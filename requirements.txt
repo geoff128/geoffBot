@@ -3,3 +3,4 @@ aiohttp
 weather-api
 asyncio
 websocket
+git+https://github.com/gitpython-developers/GitPython
