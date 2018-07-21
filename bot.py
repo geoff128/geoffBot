@@ -16,7 +16,7 @@ PREFIX = '/'
 
 client = Bot(PREFIX)
 
-commands = [['pomoc', 'wyświetla tę wiadomość'], ['rng', 'losuje liczbę z zakresu {0, 2\'147\'483\'647}'], ['rng [zakres_do]', 'losuje liczbę z zakresu {0, *zakres_do*}'], ['rng [zakres_od] [zakres_do]', 'losuje liczbę z zakresu {*zakres_od*, *zakres_do*}'], ['pogoda', 'wyświetla pogodę dla Warszawy'], ['pogoda [miasto]', 'wyświetla pogodę dla danego miasta'], ['clear, cs [n=1]', 'usuwa *n* wiadomości [1 ≥ n ≥ 100]'], ['userinfo, uinfo, ui [ID=@me]', 'wyświetla info o użytkowniku z podanym ID, domyślnie - autora wiadomości'], ['botinfo, bifno', 'wyświetla informacje o tym bocie']]
+commands = [['pomoc', 'wyświetla tę wiadomość'], ['rng', 'losuje liczbę z zakresu {0, 2\'147\'483\'647}'], ['rng [zakres_do]', 'losuje liczbę z zakresu {0, *zakres_do*}'], ['rng [zakres_od] [zakres_do]', 'losuje liczbę z zakresu {*zakres_od*, *zakres_do*}'], ['pogoda', 'wyświetla pogodę dla Warszawy'], ['pogoda [miasto]', 'wyświetla pogodę dla danego miasta'], ['clear, cs [n=1]', 'usuwa *n* wiadomości [1 ≥ n ≥ 100]'], ['userinfo, uinfo, ui [ID=@me]', 'wyświetla info o użytkowniku z podanym ID, domyślnie - autora wiadomości'], ['botinfo, bifno', 'wyświetla informacje o tym bocie'], ['addWord [kategoria] [słowo]', 'dodaje słowo do bazy słów wisielca. Uwaga spacje zastąp _ (podłoga)']]
 
 
 weather = Weather(unit=Unit.CELSIUS)
@@ -183,6 +183,15 @@ async def botinfo(ctx):
     embed.add_field(name='Dostępne komendy', value=len(commands), inline=False)
     await client.send_message(ctx.message.channel, embed=embed)
 
+@client.command(pass_context=True)
+async def addWord(ctx, kat, slowo):
+    plik = open('slowa.txt', 'a')
+    slowo = slowo.replace('_', ' ')
+    kat = kat.replace('_', ' ')
+    msg = 'Dodano słowo ' + slowo + ' (kat. ' + kat + ')'
+    plik.write(slowo + ',' + kat + ',' + ctx.message.author.id)
+    await client.send_message(ctx.message.channel, embed=info(msg))   
+ 
 
 @client.event
 async def on_message(message):
